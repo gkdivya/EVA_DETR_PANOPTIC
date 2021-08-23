@@ -24,13 +24,17 @@ Using CVAT, objects are annotated in COCO format.
 ### PANOPTIC SEGMENTATION
 ![image](https://user-images.githubusercontent.com/17870236/130357338-9afb73a2-88e4-4206-a530-87c355cb4dee.png)
 
-1. Train DETR to predict the construction materials(things).
+1. Train DETR to predict the construction materials(things) and stuffs.
 2. Once trained, we freeze the weights and train the **MASK HEAD** for 25 epochs
-3. Image is passed through the CNN and the activations of the intermediate ResNet layers 
+3. Image is passed through the CNN and the activations of the intermediate ResNet layers are kept aside
+4. Encoded Image (dxH/32xW/32) from **CNN - Resnet backbone** and object embeddings (d * N) are passed through Multi-head attention.
+5. Attention scores of the encoded image corresponding to each object embedding(both thing and stuff) generates  NxMxH/32xW/32 maps.
+6. The maps are further upsampled and concatenated with the step 3. activations of the intermediate layers to produce high resolution maps.
+7. 
 
-We take the encoded image (dxH/32xW/32) and send it to Multi-Head Attention (FROM WHERE DO WE TAKE THIS ENCODED IMAGE?) </br>
+We take the encoded image and send it to Multi-Head Attention (FROM WHERE DO WE TAKE THIS ENCODED IMAGE?) </br>
 We also send dxN Box embeddings to the Multi-Head Attention
-We do something here to generate NxMxH/32xW/32 maps. (WHAT DO WE DO HERE?)
+We do something here to generate. (WHAT DO WE DO HERE?)
 Then we concatenate these maps with Res5 Block (WHERE IS THIS COMING FROM?)
 aarch.png
 Then we perform the above steps (EXPLAIN THESE STEPS)
