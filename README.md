@@ -9,12 +9,14 @@ Objective of the project is to perform **Panoptic segmentation** on construction
 ![image](https://user-images.githubusercontent.com/17870236/130376998-6f4fb2fe-bd05-43c1-ad59-678e9d2fc133.png)
 
 1. Use ResNet backbone to extract image vector of size **d x H/32 x W/32**
-2. Use 1x1 convolution to convert the image vector as 1D
-3. Use Positional embeddings learned at input(preferrable) compared to sine based positional embeddings(DETR - default)
-4. Encoded image along with the positional embeddings is sent to transformer - encoder
-5. Object Queries random embeddings as input to decoder which gets trained in decoder to learn object embeddings
-6. Using BiPartite loss, we get the final object embeddings corresponding to the things identified in image.
-7. Using Hungarian matching algorithm, we finalize the object embeddings.
+    * Basically tensor of shape (Batch size, 3, h, w) is converted as (batchsize, 2048, h/32, w/32) with ResNet
+    * Then this feature vector is projected to (batchsize, 256, h/32, w/32)
+3. Use 1x1 convolution to convert the image vector as 1D - batch size, w/32*h/32, 256
+4. Use Positional embeddings learned at input(preferrable) compared to sine based positional embeddings(DETR - default)
+5. Encoded image along with the positional embeddings is sent to transformer - encoder
+6. Object Queries random embeddings as input to decoder which gets trained in decoder to learn object embeddings
+7. Using **BiPartite loss**, we get the final object embeddings corresponding to the things identified in image.
+8. Using Hungarian matching algorithm, we finalize the object embeddings.
 
 ### DATA CREATION
 Using CVAT, objects are annotated in COCO format.
